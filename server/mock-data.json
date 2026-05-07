@@ -1,0 +1,99 @@
+{
+  "rooms": [
+    {
+      "id": 1,
+      "hotelId": "1",
+      "name": "standard room",
+      "amount": 10,
+      "capacity": 3,
+      "price": 100,
+      "variants": [
+        {
+          "name": "",
+          "priceDelta": 0,
+          "capacity": 1
+        }
+      ],
+      "photos": [
+        "http://localhost:5001/public/1778069788135_0_s0ems6"
+      ],
+      "status": "draft",
+      "bookable": true,
+      "stars": 3
+    },
+    {
+      "id": 2,
+      "hotelId": "mansourian",
+      "name": "standard",
+      "amount": 10,
+      "capacity": 2,
+      "price": 100,
+      "variants": [
+        {
+          "name": "sea view",
+          "priceDelta": 3,
+          "capacity": 50
+        },
+        {
+          "name": "sea window",
+          "priceDelta": 2,
+          "capacity": 25
+        }
+      ],
+      "photos": [
+        "http://localhost:5001/public/1778093532992_0_74klgq"
+      ],
+      "status": "draft",
+      "bookable": true,
+      "stars": 3
+    }
+  ],
+  "nextRoomId": 3,
+  "users": [
+    {
+      "id": 1,
+      "username": "mohammad",
+      "email": "2001mohammad.mansour@gmail.com",
+      "role": "hotel_owner",
+      "hotelName": "mansourian",
+      "city": "Doha",
+      "password": "Aaaaaaaaa.",
+      "createdAt": "2026-05-06T11:58:54.223Z"
+    }
+  ],
+  "nextUserId": 2,
+  "reservations": [
+    {
+      "id": 1,
+      "hotelId": "1",
+      "roomId": 1,
+      "guestName": "Ava Johnson",
+      "checkIn": "2026-05-08",
+      "checkOut": "2026-05-11",
+      "status": "confirmed"
+    },
+    {
+      "id": 2,
+      "hotelId": "1",
+      "roomId": 2,
+      "guestName": "Noah Smith",
+      "checkIn": "2026-05-13",
+      "checkOut": "2026-05-16",
+      "status": "confirmed"
+    },
+    {
+      "id": 3,
+      "hotelId": "1",
+      "roomId": 1,
+      "guestName": "Mia Chen",
+      "checkIn": "2026-05-21",
+      "checkOut": "2026-05-24",
+      "status": "cancelled"
+    }
+  ],
+  "hotelSettings": {
+    "1": {
+      "autoAcceptBookings": true
+    }
+  }
+}
