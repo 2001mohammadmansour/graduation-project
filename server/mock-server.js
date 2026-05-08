@@ -107,6 +107,69 @@ let reservations = state.reservations;
 // per-hotel settings (mock)
 const hotelSettings = state.hotelSettings;
 
+function findOwnerIndexByHotelId(hotelId) {
+  const target = String(hotelId || '').trim().toLowerCase();
+  if (!target) return -1;
+
+  let idx = users.findIndex((u) => u.role === 'hotel_owner' && String(u.hotelId || '').trim().toLowerCase() === target);
+  if (idx !== -1) return idx;
+
+  idx = users.findIndex((u) => u.role === 'hotel_owner' && String(u.hotelName || '').trim().toLowerCase() === target);
+  if (idx !== -1) return idx;
+
+  idx = users.findIndex((u) => u.role === 'hotel_owner' && String(u.id) === String(hotelId));
+  if (idx !== -1) return idx;
+
+  const ownerUsers = users.filter((u) => u.role === 'hotel_owner');
+  if (ownerUsers.length === 1) {
+    return users.findIndex((u) => u.id === ownerUsers[0].id);
+  }
+  return -1;
+}
+
+function normalizePhotoUrls(photos, max = 8) {
+  if (!Array.isArray(photos)) return [];
+  return photos
+    .filter((photo) => typeof photo === 'string' && photo.trim())
+    .map((photo) => photo.trim())
+    .slice(0, max);
+}
+
+function buildAuthUserPayload(user) {
+  const photos = normalizePhotoUrls(user.photos);
+  return {
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    role: user.role,
+    hotelId: user.hotelId,
+    hotelName: user.hotelName,
+    city: user.city,
+    address: user.address,
+    phoneNumber: user.phoneNumber,
+    description: user.description,
+    photos,
+    cardPhoto: photos.length ? photos[0] : null,
+  };
+}
+
+function buildOwnerProfilePayload(owner) {
+  const photos = normalizePhotoUrls(owner.photos);
+  return {
+    id: owner.id,
+    username: owner.username || '',
+    email: owner.email || '',
+    hotelId: owner.hotelId || null,
+    hotelName: owner.hotelName || '',
+    city: owner.city || '',
+    address: owner.address || '',
+    phoneNumber: owner.phoneNumber || '',
+    description: owner.description || '',
+    photos,
+    cardPhoto: photos.length ? photos[0] : null,
+  };
+}
+
 
 // returns signed upload info (mock)
 app.post('/api/uploads/signed-urls', (req, res) => {
@@ -187,13 +250,17 @@ app.post('/api/auth/signup', (req, res) => {
     hotelId: payload.role === 'hotel_owner' ? String(payload.hotelId || payload.hotelName || payload.email.split('@')[0]) : null,
     hotelName: payload.hotelName || null,
     city: payload.city || null,
+    address: payload.address || null,
+    phoneNumber: payload.phoneNumber || null,
+    description: payload.description || null,
+    photos: normalizePhotoUrls(payload.photos),
     password: payload.password, // plaintext for mock only
     createdAt: new Date().toISOString(),
   };
   users.push(user);
   saveState();
   const token = `mock-token-${user.id}-${Date.now()}`;
-  res.status(201).json({ user: { id: user.id, username: user.username, email: user.email, role: user.role, hotelId: user.hotelId, hotelName: user.hotelName }, token });
+  res.status(201).json({ user: buildAuthUserPayload(user), token });
 });
 
 // Mock login
@@ -203,7 +270,7 @@ app.post('/api/auth/login', (req, res) => {
   const user = users.find(u => String(u.email).toLowerCase() === String(email).toLowerCase() && u.password === password);
   if (!user) return res.status(401).json({ message: 'Invalid credentials' });
   const token = `mock-token-${user.id}-${Date.now()}`;
-  res.json({ user: { id: user.id, username: user.username, email: user.email, role: user.role, hotelId: user.hotelId, hotelName: user.hotelName }, token });
+  res.json({ user: buildAuthUserPayload(user), token });
 });
 
 
@@ -240,6 +307,34 @@ app.patch('/api/owner/:hotelId/settings', (req, res) => {
   hotelSettings[hotelId] = { ...(hotelSettings[hotelId] || {}), ...(req.body || {}) };
   saveState();
   res.json(hotelSettings[hotelId]);
+});
+
+app.get('/api/owner/:hotelId/profile', (req, res) => {
+  const hotelId = String(req.params.hotelId);
+  const ownerIndex = findOwnerIndexByHotelId(hotelId);
+  if (ownerIndex === -1) return res.status(404).json({ message: 'Owner profile not found' });
+  res.json(buildOwnerProfilePayload(users[ownerIndex]));
+});
+
+app.patch('/api/owner/:hotelId/profile', (req, res) => {
+  const hotelId = String(req.params.hotelId);
+  const ownerIndex = findOwnerIndexByHotelId(hotelId);
+  if (ownerIndex === -1) return res.status(404).json({ message: 'Owner profile not found' });
+
+  const payload = req.body || {};
+  const current = users[ownerIndex];
+  users[ownerIndex] = {
+    ...current,
+    hotelName: typeof payload.hotelName === 'string' ? payload.hotelName.trim() : current.hotelName,
+    city: typeof payload.city === 'string' ? payload.city.trim() : current.city,
+    address: typeof payload.address === 'string' ? payload.address.trim() : current.address,
+    phoneNumber: typeof payload.phoneNumber === 'string' ? payload.phoneNumber.trim() : current.phoneNumber,
+    description: typeof payload.description === 'string' ? payload.description.trim() : current.description,
+    photos: Array.isArray(payload.photos) ? normalizePhotoUrls(payload.photos) : normalizePhotoUrls(current.photos),
+  };
+
+  saveState();
+  res.json(buildOwnerProfilePayload(users[ownerIndex]));
 });
 
 // Accept a pending reservation

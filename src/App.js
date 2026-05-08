@@ -8,6 +8,7 @@ import Login from "./Login"
 import OwnerDashboard from "./OwnerDashboard";
 import OwnerHome from "./OwnerHome";
 import OwnerStats from "./OwnerStats";
+import OwnerHotelInfo from "./OwnerHotelInfo";
 
 function OwnerRoute({ children }) {
   let role = null;
@@ -40,6 +41,7 @@ export default function App() {
       <Route path="/login" element={<Login/>}/>
       <Route path="/owner/dashboard" element={<OwnerRoute><OwnerDashboard/></OwnerRoute>} />
       <Route path="/owner/stats" element={<OwnerRoute><OwnerStats /></OwnerRoute>} />
+      <Route path="/owner/hotel-info" element={<OwnerRoute><OwnerHotelInfo /></OwnerRoute>} />
     </Routes>
   );
 }

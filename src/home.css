@@ -145,6 +145,24 @@
   text-decoration: underline;
 }
 
+.owner-profile-signout-btn {
+  display: block;
+  margin-top: 8px;
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  color: #b91c1c;
+  font-weight: 700;
+  text-align: left;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.owner-profile-signout-btn:hover {
+  background: #fff5f5;
+}
+
 .brand {
   font-size: 1.25rem;
   font-weight: 800;

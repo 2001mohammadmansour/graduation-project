@@ -1,9 +1,11 @@
 import './home.css';
 import heroImage from './assets/homepage_slider.webp';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 export default function OwnerHome() {
+  const navigate = useNavigate();
+
   const ownerProfile = (() => {
     try {
       const raw = localStorage.getItem('mock_auth_user');
@@ -93,6 +95,17 @@ export default function OwnerHome() {
     { label: 'Owner Dashboard', href: '/owner/dashboard' }
   ];
 
+  const handleSignOut = () => {
+    try {
+      localStorage.removeItem('mock_auth_user');
+      localStorage.removeItem('mock_auth_role');
+      localStorage.removeItem('mock_auth_token');
+      sessionStorage.removeItem('pending_signup_role');
+      sessionStorage.removeItem('pending_signup_profile');
+    } catch (error) {}
+    navigate('/');
+  };
+
   return (
     <div className="home" id="home">
       <nav className="navbar navbar-solid owner-navbar">
@@ -113,6 +126,8 @@ export default function OwnerHome() {
               <p className="owner-profile-line"><strong>{ownerProfile.username}</strong></p>
               <p className="owner-profile-line">{ownerProfile.hotelName}</p>
               <Link to="/owner/dashboard" className="owner-profile-dashboard-link">Dashboard</Link>
+              <Link to="/owner/hotel-info" className="owner-profile-dashboard-link">Edit Hotel Info</Link>
+              <button type="button" className="owner-profile-signout-btn" onClick={handleSignOut}>Sign Out</button>
             </div>
           </div>
         </div>

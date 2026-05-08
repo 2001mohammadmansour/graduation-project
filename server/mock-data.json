@@ -46,22 +46,58 @@
       "status": "draft",
       "bookable": true,
       "stars": 3
+    },
+    {
+      "id": 3,
+      "hotelId": "sheraton",
+      "name": "standard room",
+      "amount": 10,
+      "capacity": 2,
+      "price": 100,
+      "variants": [],
+      "photos": [
+        "http://localhost:5001/public/1778263374514_0_52v8v2"
+      ],
+      "status": "draft",
+      "bookable": true,
+      "stars": 3
     }
   ],
-  "nextRoomId": 3,
+  "nextRoomId": 4,
   "users": [
     {
       "id": 1,
       "username": "mohammad",
       "email": "2001mohammad.mansour@gmail.com",
       "role": "hotel_owner",
-      "hotelName": "mansourian",
-      "city": "Doha",
+      "hotelName": "sheraton",
+      "city": "aleppo",
       "password": "Aaaaaaaaa.",
-      "createdAt": "2026-05-06T11:58:54.223Z"
+      "createdAt": "2026-05-06T11:58:54.223Z",
+      "address": "city center",
+      "phoneNumber": "0933145916",
+      "description": "best hotel in aleppo",
+      "photos": [
+        "http://localhost:5001/public/1778263332404_0_6rx2q7"
+      ]
+    },
+    {
+      "id": 2,
+      "username": "gizmo",
+      "email": "20001mohammad.mansour@gmail.com",
+      "role": "guest",
+      "hotelId": null,
+      "hotelName": null,
+      "city": null,
+      "address": null,
+      "phoneNumber": "33605924",
+      "description": null,
+      "photos": [],
+      "password": "Aaaaaaaaa.",
+      "createdAt": "2026-05-08T18:07:45.147Z"
     }
   ],
-  "nextUserId": 2,
+  "nextUserId": 3,
   "reservations": [
     {
       "id": 1,

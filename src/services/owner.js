@@ -44,6 +44,14 @@ export async function getSettings(hotelId) {
   return request(`/api/owner/${hotelId}/settings`);
 }
 
+export async function getHotelProfile(hotelId) {
+  return request(`/api/owner/${hotelId}/profile`);
+}
+
+export async function updateHotelProfile(hotelId, updates) {
+  return request(`/api/owner/${hotelId}/profile`, { method: 'PATCH', body: JSON.stringify(updates) });
+}
+
 export async function updateSettings(hotelId, updates) {
   return request(`/api/owner/${hotelId}/settings`, { method: 'PATCH', body: JSON.stringify(updates) });
 }
@@ -88,5 +96,5 @@ export async function createRoom(hotelId, payload) {
   return request(`/api/owner/${hotelId}/rooms`, { method: 'POST', body: JSON.stringify(payload) });
 }
 
-const ownerService = { getBilling, getRevenueStats, getMetrics, getRooms, getReservations, getSettings, updateSettings, acceptReservation, rejectReservation, createReservation, toggleCampaign, updateCancelPolicy, updateRoom, deleteRoom, getUploadUrls, createRoom };
+const ownerService = { getBilling, getRevenueStats, getMetrics, getRooms, getReservations, getSettings, getHotelProfile, updateHotelProfile, updateSettings, acceptReservation, rejectReservation, createReservation, toggleCampaign, updateCancelPolicy, updateRoom, deleteRoom, getUploadUrls, createRoom };
 export default ownerService;
